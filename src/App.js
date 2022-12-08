@@ -12,13 +12,11 @@ function App() {
       <div className="wrapper">
         <Header />
         <div className="content">
-          <div className="container">
-            <Switch>
-              <Route path="/cart" exact component={Cart} />
-              <Route path="/" exact component={Home} />
-              <Route path="*" component={NotFound} />
-            </Switch>
-          </div>
+          <Switch>
+            <Route path="/cart" exact component={Cart} />
+            <Route path="/" exact component={Home} />
+            <Route path="*" component={NotFound} />
+          </Switch>
         </div>
       </div>
     </>

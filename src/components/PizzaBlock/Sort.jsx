@@ -1,10 +1,7 @@
 import React from "react";
 
-const Sort = () => {
+const Sort = ({ setSelectedSort, selectedSort, sortTypes }) => {
   const [isVisible, setIsVisible] = React.useState(false);
-  const [selectedSort, setSelectedSort] = React.useState(0);
-
-  const sortTypes = ["популярности", "цене", "алфавиту"];
 
   const chooseSort = (i) => {
     setSelectedSort(i);

@@ -2,9 +2,10 @@ import React from "react";
 
 const Sort = ({ setSelectedSort, selectedSort, sortTypes }) => {
   const [isVisible, setIsVisible] = React.useState(false);
+  console.log(isVisible);
 
-  const chooseSort = (i) => {
-    setSelectedSort(i);
+  const chooseSort = (obj) => {
+    setSelectedSort(obj);
     setIsVisible(false);
   };
 
@@ -25,19 +26,21 @@ const Sort = ({ setSelectedSort, selectedSort, sortTypes }) => {
         </svg>
         <b>Сортировка по:</b>
         <span onClick={() => setIsVisible(!isVisible)}>
-          {sortTypes[selectedSort]}
+          {selectedSort.name}
         </span>
       </div>
       {isVisible && (
         <div className="sort__popup">
           <ul>
-            {sortTypes.map((type, i) => (
+            {sortTypes.map((obj, i) => (
               <li
-                onClick={() => chooseSort(i)}
-                className={i === selectedSort ? "active" : ""}
-                key={type}
+                onClick={() => chooseSort(obj)}
+                className={
+                  obj.sortProperty === selectedSort.sortProperty ? "active" : ""
+                }
+                key={i}
               >
-                {type}
+                {obj.name}
               </li>
             ))}
           </ul>

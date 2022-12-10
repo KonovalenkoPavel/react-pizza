@@ -9,7 +9,10 @@ import Skeleton from "../components/PizzaBlock/Skeleton";
 const Home = () => {
   const [items, setItems] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
-  const [selectedSort, setSelectedSort] = React.useState(0);
+  const [selectedSort, setSelectedSort] = React.useState({
+    name: "популярности Desc",
+    sortProperty: "rating",
+  });
   const [activeCategory, setActiveCategory] = React.useState(0);
 
   const allCategories = [
@@ -21,20 +24,27 @@ const Home = () => {
     "Закрытые",
   ];
 
-  const sortTypes = ["популярности", "цене", "алфавиту"];
+  const sortTypes = [
+    { name: "популярности Desc", sortProperty: "rating" },
+    { name: "популярности Asc", sortProperty: "-rating" },
+    { name: "цене Desc", sortProperty: "price" },
+    { name: "цене Asc", sortProperty: "-price" },
+    { name: "алфавиту Desc", sortProperty: "title" },
+    { name: "алфавиту Asc", sortProperty: "-title" },
+
+    "цене",
+    "алфавиту",
+  ];
 
   React.useEffect(() => {
-    const sortApi =
-      selectedSort === 0
-        ? "sortBy=rating&order=desc"
-        : selectedSort === 1
-        ? "sortBy=price&order=asc"
-        : "sortBy=title&order=asc";
+    const sortApi = selectedSort.sortProperty.replace("-", "");
+    const sortApiType = selectedSort.sortProperty.includes("-")
+      ? "asc"
+      : "desc";
     const categoryApi = activeCategory ? `&category=${activeCategory}` : "";
     setIsLoading(true);
     fetch(
-      `https://638ebd189cbdb0dbe31391f2.mockapi.io/item?` +
-        sortApi +
+      `https://638ebd189cbdb0dbe31391f2.mockapi.io/item?sortBy=${sortApi}&order=${sortApiType}` +
         categoryApi
     )
       .then((resolve) => resolve.json())

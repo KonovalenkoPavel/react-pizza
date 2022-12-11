@@ -6,7 +6,7 @@ import Sort from "../components/PizzaBlock/Sort";
 import "../scss/app.scss";
 import Skeleton from "../components/PizzaBlock/Skeleton";
 
-const Home = () => {
+const Home = ({ searchValue }) => {
   const [items, setItems] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const [selectedSort, setSelectedSort] = React.useState({
@@ -42,9 +42,10 @@ const Home = () => {
       ? "asc"
       : "desc";
     const categoryApi = activeCategory ? `&category=${activeCategory}` : "";
+    const serchedItems = searchValue ? `&search=${searchValue}` : "";
     setIsLoading(true);
     fetch(
-      `https://638ebd189cbdb0dbe31391f2.mockapi.io/item?sortBy=${sortApi}&order=${sortApiType}` +
+      `https://638ebd189cbdb0dbe31391f2.mockapi.io/item?sortBy=${sortApi}${serchedItems}&order=${sortApiType}` +
         categoryApi
     )
       .then((resolve) => resolve.json())
@@ -53,7 +54,7 @@ const Home = () => {
         setIsLoading(false);
       });
     window.scrollTo(0, 0);
-  }, [activeCategory, selectedSort]);
+  }, [activeCategory, selectedSort, searchValue]);
 
   return (
     <div className="container">

@@ -2,7 +2,6 @@ import React from "react";
 
 const Sort = ({ setSelectedSort, selectedSort, sortTypes }) => {
   const [isVisible, setIsVisible] = React.useState(false);
-  console.log(isVisible);
 
   const chooseSort = (obj) => {
     setSelectedSort(obj);

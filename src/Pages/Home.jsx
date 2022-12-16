@@ -1,4 +1,5 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
 import Categories from "../components/PizzaBlock/Categories";
 import PizzaBlock from "../components/PizzaBlock";
@@ -8,13 +9,14 @@ import Skeleton from "../components/PizzaBlock/Skeleton";
 import Pagination from "../components/Pagination";
 
 const Home = ({ searchValue }) => {
+  const { selectedSort, activeCategory } = useSelector((state) => state.filter);
   const [items, setItems] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
-  const [selectedSort, setSelectedSort] = React.useState({
-    name: "популярности Desc",
-    sortProperty: "rating",
-  });
-  const [activeCategory, setActiveCategory] = React.useState(0);
+  // const [selectedSort, setSelectedSort] = React.useState({
+  //   name: "популярности Desc",
+  //   sortProperty: "rating",
+  // });
+  // const [activeCategory, setActiveCategory] = React.useState(0);
   const [currentPage, setCurrentPage] = React.useState(1);
   const itemsOnPage = 4;
 
@@ -25,18 +27,6 @@ const Home = ({ searchValue }) => {
     "Гриль",
     "Острые",
     "Закрытые",
-  ];
-
-  const sortTypes = [
-    { name: "популярности Desc", sortProperty: "rating" },
-    { name: "популярности Asc", sortProperty: "-rating" },
-    { name: "цене Desc", sortProperty: "price" },
-    { name: "цене Asc", sortProperty: "-price" },
-    { name: "алфавиту Desc", sortProperty: "title" },
-    { name: "алфавиту Asc", sortProperty: "-title" },
-
-    "цене",
-    "алфавиту",
   ];
 
   React.useEffect(() => {
@@ -67,16 +57,8 @@ const Home = ({ searchValue }) => {
   return (
     <div className="container">
       <div className="content__top">
-        <Categories
-          activeCategory={activeCategory}
-          onCategorySelect={(id) => setActiveCategory(id)}
-          allCategories={allCategories}
-        />
-        <Sort
-          selectedSort={selectedSort}
-          setSelectedSort={(id) => setSelectedSort(id)}
-          sortTypes={sortTypes}
-        />
+        <Categories allCategories={allCategories} />
+        <Sort />
       </div>
       <h2 className="content__title">{allCategories[activeCategory]}</h2>
       <div className="content__items">

@@ -1,10 +1,23 @@
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { setSelectedSort } from "../../redux/slices/filterSlice";
 
-const Sort = ({ setSelectedSort, selectedSort, sortTypes }) => {
+const Sort = () => {
   const [isVisible, setIsVisible] = React.useState(false);
+  const selectedSort = useSelector((state) => state.filter.selectedSort);
+  const dispatch = useDispatch();
+
+  const sortTypes = [
+    { name: "популярности Desc", sortProperty: "rating" },
+    { name: "популярности Asc", sortProperty: "-rating" },
+    { name: "цене Desc", sortProperty: "price" },
+    { name: "цене Asc", sortProperty: "-price" },
+    { name: "алфавиту Desc", sortProperty: "title" },
+    { name: "алфавиту Asc", sortProperty: "-title" },
+  ];
 
   const chooseSort = (obj) => {
-    setSelectedSort(obj);
+    dispatch(setSelectedSort(obj));
     setIsVisible(false);
   };
 

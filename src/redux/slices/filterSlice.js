@@ -6,6 +6,7 @@ const initialState = {
     sortProperty: "rating",
   },
   activeCategory: 0,
+  currentPage: 1,
 };
 
 export const filterSlice = createSlice({
@@ -19,10 +20,14 @@ export const filterSlice = createSlice({
     setActiveCategory(state, action) {
       state.activeCategory = action.payload;
     },
+    setCurrentPage(state, action) {
+      state.currentPage = action.payload;
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { setSelectedSort, setActiveCategory } = filterSlice.actions;
+export const { setCurrentPage, setSelectedSort, setActiveCategory } =
+  filterSlice.actions;
 
 export default filterSlice.reducer;

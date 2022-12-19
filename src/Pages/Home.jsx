@@ -1,5 +1,5 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import Categories from "../components/PizzaBlock/Categories";
 import PizzaBlock from "../components/PizzaBlock";
@@ -8,12 +8,15 @@ import "../scss/app.scss";
 import Skeleton from "../components/PizzaBlock/Skeleton";
 import Pagination from "../components/Pagination";
 import axios from "axios";
+import { setCurrentPage } from "../redux/slices/filterSlice";
 
 const Home = ({ searchValue }) => {
   const { selectedSort, activeCategory } = useSelector((state) => state.filter);
   const [items, setItems] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
-  const [currentPage, setCurrentPage] = React.useState(1);
+  // const [currentPage, setCurrentPage] = React.useState(1);
+  const dispatch = useDispatch();
+  const currentPage = useSelector((state) => state.filter.currentPage);
   const itemsOnPage = 4;
 
   const allCategories = [
@@ -47,7 +50,7 @@ const Home = ({ searchValue }) => {
   }, [activeCategory, selectedSort, searchValue, currentPage]);
 
   React.useEffect(() => {
-    setCurrentPage(1);
+    dispatch(setCurrentPage(1));
   }, [activeCategory, selectedSort, searchValue]);
 
   return (

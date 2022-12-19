@@ -7,16 +7,12 @@ import Sort from "../components/PizzaBlock/Sort";
 import "../scss/app.scss";
 import Skeleton from "../components/PizzaBlock/Skeleton";
 import Pagination from "../components/Pagination";
+import axios from "axios";
 
 const Home = ({ searchValue }) => {
   const { selectedSort, activeCategory } = useSelector((state) => state.filter);
   const [items, setItems] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
-  // const [selectedSort, setSelectedSort] = React.useState({
-  //   name: "популярности Desc",
-  //   sortProperty: "rating",
-  // });
-  // const [activeCategory, setActiveCategory] = React.useState(0);
   const [currentPage, setCurrentPage] = React.useState(1);
   const itemsOnPage = 4;
 
@@ -37,13 +33,13 @@ const Home = ({ searchValue }) => {
     const categoryApi = activeCategory ? `&category=${activeCategory}` : "";
     const serchedItems = searchValue ? `&search=${searchValue}` : "";
     setIsLoading(true);
-    fetch(
-      `https://638ebd189cbdb0dbe31391f2.mockapi.io/item?sortBy=${sortApi}${serchedItems}&order=${sortApiType}&page=${currentPage}&limit=${itemsOnPage}` +
-        categoryApi
-    )
-      .then((resolve) => resolve.json())
+    axios
+      .get(
+        `https://638ebd189cbdb0dbe31391f2.mockapi.io/items?sortBy=${sortApi}${serchedItems}&order=${sortApiType}&page=${currentPage}&limit=${itemsOnPage}` +
+          categoryApi
+      )
       .then((data) => {
-        setItems(data);
+        setItems(data.data);
         setIsLoading(false);
       });
 

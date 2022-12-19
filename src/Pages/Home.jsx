@@ -8,16 +8,18 @@ import "../scss/app.scss";
 import Skeleton from "../components/PizzaBlock/Skeleton";
 import Pagination from "../components/Pagination";
 import axios from "axios";
-import { setCurrentPage } from "../redux/slices/filterSlice";
+import { setCurrentPage, setFilters } from "../redux/slices/filterSlice";
+import qs from "qs";
+import { useHistory } from "react-router-dom";
 
 const Home = ({ searchValue }) => {
   const { selectedSort, activeCategory } = useSelector((state) => state.filter);
   const [items, setItems] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
-  // const [currentPage, setCurrentPage] = React.useState(1);
   const dispatch = useDispatch();
   const currentPage = useSelector((state) => state.filter.currentPage);
   const itemsOnPage = 4;
+  const navigate = useHistory();
 
   const allCategories = [
     "Все",
@@ -27,6 +29,27 @@ const Home = ({ searchValue }) => {
     "Острые",
     "Закрытые",
   ];
+
+  const sortTypes = [
+    { name: "популярности Desc", sortProperty: "rating" },
+    { name: "популярности Asc", sortProperty: "-rating" },
+    { name: "цене Desc", sortProperty: "price" },
+    { name: "цене Asc", sortProperty: "-price" },
+    { name: "алфавиту Desc", sortProperty: "title" },
+    { name: "алфавиту Asc", sortProperty: "-title" },
+  ];
+
+  React.useEffect(() => {
+    if (window.location.search) {
+      const params = qs.parse(window.location.search.substring(1));
+      console.log(params, "params");
+      const sort = sortTypes.find(
+        (obj) => obj.sortProperty === params.sortProperty
+      );
+      console.log(sort, "sort");
+      dispatch(setFilters({ ...params, sort }));
+    }
+  }, []);
 
   React.useEffect(() => {
     const sortApi = selectedSort.sortProperty.replace("-", "");
@@ -53,11 +76,21 @@ const Home = ({ searchValue }) => {
     dispatch(setCurrentPage(1));
   }, [activeCategory, selectedSort, searchValue]);
 
+  React.useEffect(() => {
+    const queryString = qs.stringify({
+      sortProperty: selectedSort.sortProperty,
+      activeCategory,
+      currentPage,
+    });
+
+    navigate.push(`?${queryString}`);
+  }, [activeCategory, selectedSort, currentPage]);
+
   return (
     <div className="container">
       <div className="content__top">
         <Categories allCategories={allCategories} />
-        <Sort />
+        <Sort sortTypes={sortTypes} />
       </div>
       <h2 className="content__title">{allCategories[activeCategory]}</h2>
       <div className="content__items">

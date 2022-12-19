@@ -14,9 +14,9 @@ const Search = () => {
     inputRef.current.focus();
   };
 
-  const onFounChange = (text) => {
-    setValue(text);
-    updateSearchValue(text);
+  const onFounChange = (event) => {
+    setValue(event.target.value);
+    updateSearchValue(event.target.value);
   };
 
   const updateSearchValue = React.useCallback(
@@ -42,7 +42,7 @@ const Search = () => {
       <input
         ref={inputRef}
         value={value}
-        onChange={(e) => onFounChange(e.target.value)}
+        onChange={(e) => onFounChange(e)}
         className={style.input}
         placeholder="Поиск пиццы..."
       />

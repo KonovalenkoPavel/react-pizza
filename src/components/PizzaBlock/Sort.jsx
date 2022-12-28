@@ -17,9 +17,7 @@ const Sort = ({ sortTypes }) => {
     const handleClickOutside = (event) => {
       if (!event.path.includes(sortRef.current)) {
         setIsVisible(false);
-        console.log(456);
       }
-      console.log(123);
     };
     document.body.addEventListener("click", handleClickOutside);
     return () => {

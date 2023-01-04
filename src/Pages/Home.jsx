@@ -41,7 +41,7 @@ const Home = ({ searchValue }) => {
     { name: "алфавиту Asc", sortProperty: "-title" },
   ];
 
-  const fetchPizzaz = () => {
+  const fetchPizzaz = async () => {
     const sortApi = selectedSort.sortProperty.replace("-", "");
     const sortApiType = selectedSort.sortProperty.includes("-")
       ? "asc"
@@ -49,15 +49,19 @@ const Home = ({ searchValue }) => {
     const categoryApi = activeCategory ? `&category=${activeCategory}` : "";
     const serchedItems = searchValue ? `&search=${searchValue}` : "";
     setIsLoading(true);
-    axios
-      .get(
+    try {
+      const data = await axios.get(
         `https://638ebd189cbdb0dbe31391f2.mockapi.io/items?sortBy=${sortApi}${serchedItems}&order=${sortApiType}&page=${currentPage}&limit=${itemsOnPage}` +
           categoryApi
-      )
-      .then((data) => {
-        setItems(data.data);
-        setIsLoading(false);
-      });
+      );
+
+      setItems(data.data);
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      alert("Ошибка при получении пицц");
+      console.log(error, "Error");
+    }
 
     window.scrollTo(0, 0);
   };

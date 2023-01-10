@@ -11,17 +11,22 @@ import axios from "axios";
 import { setCurrentPage, setFilters } from "../redux/slices/filterSlice";
 import qs from "qs";
 import { useHistory } from "react-router-dom";
+import { fetchPizzas, setItems } from "../redux/slices/pizzaSlice";
 
 const Home = ({ searchValue }) => {
   const isSearch = React.useRef(false); // после первого рендера и изменении параметров сортировки меняется на true
   const isMounted = React.useRef(false);
-  const { selectedSort, activeCategory } = useSelector((state) => state.filter);
-  const [items, setItems] = React.useState([]);
-  const [isLoading, setIsLoading] = React.useState(true);
+
   const dispatch = useDispatch();
-  const currentPage = useSelector((state) => state.filter.currentPage);
-  const itemsOnPage = 4;
   const navigate = useHistory();
+  const currentPage = useSelector((state) => state.filter.currentPage);
+  const { selectedSort, activeCategory } = useSelector((state) => state.filter);
+  const { items, status } = useSelector((state) => state.pizza);
+
+  // const [items, setItems] = React.useState([]);
+  // const [isLoading, setIsLoading] = React.useState(true);
+
+  const itemsOnPage = 4;
 
   const allCategories = [
     "Все",
@@ -41,27 +46,24 @@ const Home = ({ searchValue }) => {
     { name: "алфавиту Asc", sortProperty: "-title" },
   ];
 
-  const fetchPizzaz = async () => {
+  const getPizzaz = async () => {
     const sortApi = selectedSort.sortProperty.replace("-", "");
     const sortApiType = selectedSort.sortProperty.includes("-")
       ? "asc"
       : "desc";
     const categoryApi = activeCategory ? `&category=${activeCategory}` : "";
     const serchedItems = searchValue ? `&search=${searchValue}` : "";
-    setIsLoading(true);
-    try {
-      const data = await axios.get(
-        `https://638ebd189cbdb0dbe31391f2.mockapi.io/items?sortBy=${sortApi}${serchedItems}&order=${sortApiType}&page=${currentPage}&limit=${itemsOnPage}` +
-          categoryApi
-      );
-
-      setItems(data.data);
-      setIsLoading(false);
-    } catch (error) {
-      setIsLoading(false);
-      alert("Ошибка при получении пицц");
-      console.log(error, "Error");
-    }
+    // setIsLoading(true);
+    dispatch(
+      fetchPizzas({
+        sortApi,
+        serchedItems,
+        sortApiType,
+        currentPage,
+        itemsOnPage,
+        categoryApi,
+      })
+    );
 
     window.scrollTo(0, 0);
   };
@@ -83,7 +85,7 @@ const Home = ({ searchValue }) => {
   // основной рендер, направляющий запросы на сервер при изменении параметров сортировки
   React.useEffect(() => {
     if (isSearch.current) {
-      fetchPizzaz();
+      getPizzaz();
     }
     isSearch.current = true;
   }, [activeCategory, selectedSort, searchValue, currentPage]);
@@ -118,7 +120,7 @@ const Home = ({ searchValue }) => {
       </div>
       <h2 className="content__title">{allCategories[activeCategory]}</h2>
       <div className="content__items">
-        {isLoading
+        {status === "loading"
           ? [...new Array(6)].map((_, i) => <Skeleton key={i} />)
           : items.map((pizza) => <PizzaBlock key={pizza.id} {...pizza} />)}
       </div>

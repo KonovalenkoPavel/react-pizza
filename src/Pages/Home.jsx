@@ -119,11 +119,22 @@ const Home = ({ searchValue }) => {
         <Sort sortTypes={sortTypes} />
       </div>
       <h2 className="content__title">{allCategories[activeCategory]}</h2>
-      <div className="content__items">
-        {status === "loading"
-          ? [...new Array(6)].map((_, i) => <Skeleton key={i} />)
-          : items.map((pizza) => <PizzaBlock key={pizza.id} {...pizza} />)}
-      </div>
+      {status === "error" ? (
+        <div className="content___error-info">
+          <h2>Произошла ошибка</h2>
+          <p>
+            К сожалению не удалось получить пиццы. Попробуйте повторить попытку
+            позже.
+          </p>
+        </div>
+      ) : (
+        <div className="content__items">
+          {status === "loading"
+            ? [...new Array(6)].map((_, i) => <Skeleton key={i} />)
+            : items.map((pizza) => <PizzaBlock key={pizza.id} {...pizza} />)}
+        </div>
+      )}
+
       <Pagination
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}

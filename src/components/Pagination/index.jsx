@@ -13,7 +13,7 @@ const Pagination = ({ currentPage, setCurrentPage, itemsOnPage }) => {
     <div className={styles.container}>
       {currentPage !== 1 && (
         <div
-          onClick={() => dispatch(setCurrentPage((prevPage) => prevPage - 1))}
+          onClick={() => dispatch(setCurrentPage(currentPage - 1))}
           className={styles.item}
         >
           {"<"}
@@ -33,7 +33,7 @@ const Pagination = ({ currentPage, setCurrentPage, itemsOnPage }) => {
       ))}
       {currentPage !== pageCount && (
         <div
-          onClick={() => dispatch(setCurrentPage((prevPage) => prevPage + 1))}
+          onClick={() => dispatch(setCurrentPage(currentPage + 1))}
           className={styles.item}
         >
           {">"}

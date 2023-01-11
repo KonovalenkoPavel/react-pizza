@@ -8,19 +8,25 @@ import "../scss/app.scss";
 import Skeleton from "../components/PizzaBlock/Skeleton";
 import Pagination from "../components/Pagination";
 import axios from "axios";
-import { setCurrentPage, setFilters } from "../redux/slices/filterSlice";
+import {
+  selectFilter,
+  setCurrentPage,
+  setFilters,
+} from "../redux/slices/filterSlice";
 import qs from "qs";
 import { useHistory } from "react-router-dom";
-import { fetchPizzas, setItems } from "../redux/slices/pizzaSlice";
+import { fetchPizzas } from "../redux/slices/pizzaSlice";
 
-const Home = ({ searchValue }) => {
+const Home = () => {
   const isSearch = React.useRef(false); // после первого рендера и изменении параметров сортировки меняется на true
   const isMounted = React.useRef(false);
 
   const dispatch = useDispatch();
   const navigate = useHistory();
-  const currentPage = useSelector((state) => state.filter.currentPage);
-  const { selectedSort, activeCategory } = useSelector((state) => state.filter);
+  const currentPage = useSelector(selectFilter);
+  const { selectedSort, activeCategory, searchValue } = useSelector(
+    (state) => state.filter
+  );
   const { items, status } = useSelector((state) => state.pizza);
 
   // const [items, setItems] = React.useState([]);

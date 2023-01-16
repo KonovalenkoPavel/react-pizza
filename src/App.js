@@ -5,6 +5,7 @@ import Header from "./components/PizzaBlock/Header";
 import Cart from "./Pages/Cart";
 import Home from "./Pages/Home";
 import NotFound from "./Pages/NotFound";
+import FullPizza from "./Pages/FullPizza";
 
 function App() {
   return (
@@ -14,7 +15,9 @@ function App() {
         <div className="content">
           <Switch>
             <Route path="/cart" exact component={Cart} />
+            <Route path="/pizza/:id" component={FullPizza} />
             <Route path="/" exact render={() => <Home />} />
+
             <Route path="*" component={NotFound} />
           </Switch>
         </div>

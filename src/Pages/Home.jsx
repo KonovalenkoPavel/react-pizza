@@ -14,7 +14,7 @@ import {
   setFilters,
 } from "../redux/slices/filterSlice";
 import qs from "qs";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { fetchPizzas } from "../redux/slices/pizzaSlice";
 
 const Home = () => {
@@ -137,11 +137,7 @@ const Home = () => {
         <div className="content__items">
           {status === "loading"
             ? [...new Array(6)].map((_, i) => <Skeleton key={i} />)
-            : items.map((pizza) => (
-                <Link to={`/pizza/${pizza.id}`} key={pizza.id}>
-                  <PizzaBlock {...pizza} />
-                </Link>
-              ))}
+            : items.map((pizza) => <PizzaBlock {...pizza} key={pizza.id} />)}
         </div>
       )}
 
